@@ -11,4 +11,10 @@ export class Cell {
     this.state = state
   }
 
+  render(){
+    return `
+      <td>${this.state}</td>
+    `
+  }
+
 }

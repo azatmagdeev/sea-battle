@@ -2,54 +2,50 @@ import {Cell} from "./Cell.js";
 
 export class Sea {
 
-  rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
-  cells = []
-  ships = []
+    rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+    cells = []
+    ships = []
 
-  constructor() {
-    this.init()
-  }
+    constructor(isEnemy) {
+        this.init(isEnemy)
+    }
 
-  init() {
-    this.rows.map(row => {
-      this.cols.map(col => {
-        this.cells.push(new Cell(col,row))
-      })
-    })
-  }
+    init(isEnemy) {
+        this.rows.map(row => {
+            this.cols.map(col => {
+                this.cells.push(new Cell(col, row))
+            })
+        })
+    }
 
-  vue(){
-    return {
-      props:['cols','rows','cells'],
-      methods: {
-        buildShip: (e)=>{
-          e.target.innerHTML = '';
-          e.target.style.backgroundColor = 'green'
-        }
-      },
-      template: `
+    cell(col, row) {
+        return this.cells.find(cell => cell.x === col && cell.y === row)
+    }
+
+    render() {
+        return `
         <table style="border: 1px solid grey">
           <thead>
               <tr>
                   <td></td>
-                  <th v-for="col in cols">{{col}}</th>
+                  ${this.cols.map(col => `<th>${col}</th>`)}
               </tr>
           </thead>
           <tbody>
-              <tr v-for="row of rows">
-                <th>{{row}}</th>
-                <td v-for="col of cols" 
-                    v-on:click="buildShip">
-                  {{cells.find(c=>c.y === row && c.x === col).state}}
-                </td>
+            ${this.rows.map(row => `
+              <tr>
+                <th>${row}</th>
+                ${this.cols.map(col => `
+                  ${this.cell(col, row).render()}`)}
               </tr>
+            `)}
           </tbody>
         </table>
       
       `
+
     }
-  }
 }
 
 
