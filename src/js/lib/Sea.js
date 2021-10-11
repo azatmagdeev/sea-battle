@@ -14,7 +14,7 @@ export class Sea {
   init() {
     this.rows.map(row => {
       this.cols.map(col => {
-        this.cells.push(new Cell(col,row, "🔥"))
+        this.cells.push(new Cell(col,row))
       })
     })
   }
@@ -22,23 +22,35 @@ export class Sea {
   vue(){
     return {
       props:['cols','rows','cells'],
+      methods: {
+        buildShip: (e)=>{
+          e.target.innerHTML = '';
+          e.target.style.backgroundColor = 'green'
+        }
+      },
       template: `
-        <table border="1px">
-    <thead>
-        <tr>
-            <td></td>
-            <th v-for="col in cols">{{col}}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr v-for="row of rows">
-          <th>{{row}}</th>
-          <td v-for="col of cols">{{cells.find(c=>c.y === row && c.x === col).state}}</td>
-        </tr>
-    </tbody>
-</table>
+        <table style="border: 1px solid grey">
+          <thead>
+              <tr>
+                  <td></td>
+                  <th v-for="col in cols">{{col}}</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="row of rows">
+                <th>{{row}}</th>
+                <td v-for="col of cols" 
+                    v-on:click="buildShip">
+                  {{cells.find(c=>c.y === row && c.x === col).state}}
+                </td>
+              </tr>
+          </tbody>
+        </table>
       
       `
     }
   }
 }
+
+
+//🔥
